@@ -6,5 +6,5 @@ import { getObjectType } from '@/_internal/lang'
  * @returns 
  */
 export function isArray(value: any) {
-  return getObjectType(value) === '[object Array]'
+  return getObjectType(value) === 'Array'
 }
