@@ -16,18 +16,18 @@ export default [
   defineConfig({
     input: config.input,
     output: [{
-      dir: 'lib',
+      dir: config.OUT_ROOT,
       format: 'esm',
     }],
     external: Object.keys((pkg as any).peerDependencies || {}),
     plugins: [
       alias({
         entries: {
-          '@': path.resolve(__dirname, '../src')
+          '@': config.SRC_ROOT,
         }
       }),
       clear({
-        targets: ['dist'],
+        targets: [config.OUT_ROOT],
       }),
       ts({
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
@@ -50,7 +50,7 @@ export default [
   defineConfig({
     input: config.input,
     output: {
-      dir: 'lib',
+      dir: config.OUT_ROOT,
     },
     plugins: [
       dts({

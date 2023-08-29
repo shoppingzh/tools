@@ -2,6 +2,7 @@ import fs from 'fs'
 import path from 'path'
 
 const SRC_ROOT = path.resolve(__dirname, '../src')
+const OUT_ROOT = path.resolve(__dirname, '../lib')
 const entries = fs.readdirSync(SRC_ROOT, { withFileTypes: true }).filter(o => o.isDirectory()).map(o => o.name)
 
 const input = entries.reduce((map, o) => {
@@ -11,6 +12,7 @@ const input = entries.reduce((map, o) => {
 
 export default {
   SRC_ROOT,
+  OUT_ROOT,
   entries,
   input,
 }
