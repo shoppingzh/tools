@@ -1,4 +1,6 @@
 {
+  "name": "tools",
+  "version": "0.0.1",
   "scripts": {
     "dev": "rollup -c scripts/rollup.config.ts --configPlugin=typescript={tsconfig:'scripts/tsconfig.build.json'} --bundleConfigAsCjs --watch",
     "build": "rollup -c scripts/rollup.config.ts --configPlugin=typescript={tsconfig:'scripts/tsconfig.build.json'} --bundleConfigAsCjs",
