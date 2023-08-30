@@ -10,9 +10,14 @@ const input = entries.reduce((map, o) => {
   return map
 }, {} as Record<string, string>)
 
+const env = process.env.NODE_ENV
+
 export default {
   SRC_ROOT,
   OUT_ROOT,
   entries,
   input,
+  env,
+  isDevEnv: env === 'dev',
+  isProdEnv: env === 'prod',
 }

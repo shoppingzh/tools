@@ -32,17 +32,17 @@ export default [
       ts({
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
       }),
-      babel({
+      config.isProdEnv && babel({
         babelHelpers: 'runtime',
       }),
       // 去除console.log
-      strip({
+      config.isProdEnv && strip({
         include: 'src/**/*.{ts,js}'
       }),
       // 生成包大小监控
       sizes(100),
       // 代码混淆
-      terser(),
+      config.isProdEnv && terser(),
       // 警告声
       beep(),
     ],
