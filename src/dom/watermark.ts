@@ -7,6 +7,7 @@ interface WatermarkCoreOptions {
   textColor?: string
   textSize?: number
   fontBold?: boolean
+  fontItalic?: boolean
   rotate?: number
   // 背景
   bgColor?: string
@@ -57,7 +58,7 @@ function renderWatermark(text: string, options: RenderWatermarkOptions) {
   const opts = options || {}
   const canvas = opts.canvas || document.createElement('canvas')
   const ctx = canvas.getContext('2d')
-  const font = `${opts.fontBold ? 'bold' : ''}${opts.textSize}px ${opts.fontFamily}`
+  const font = `${opts.fontBold ? 'bold' : ''} ${opts.fontItalic ? 'italic' : ''} ${opts.textSize}px ${opts.fontFamily}`
 
   // 1. 确定文字绘制边界
   const textRect = getTextRect(ctx, font, text)
@@ -106,6 +107,7 @@ const DEFAULT_CREATE_WATERMARK_OPTIONS: CreateWatermarkOptions = {
   textColor: 'rgba(100, 100, 100, .15)',
   textSize: 16,
   fontBold: false,
+  fontItalic: false,
   rotate: -10,
   bgColor: 'rgba(0, 0, 0, 0)',
   padding: [30, 50],
