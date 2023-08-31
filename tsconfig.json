@@ -3,6 +3,8 @@
     "noImplicitAny": true,
     "esModuleInterop": true,
     "baseUrl": ".",
+    "target": "ES6",
+    "moduleResolution": "Node",
     "paths": {
       "@/*": ["src/*"]
     }
