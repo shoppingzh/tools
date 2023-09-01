@@ -1,5 +1,6 @@
 import { getObjectType } from '@/_internal'
 import { merge } from 'lodash'
+import { setStyle } from '.'
 
 interface WatermarkCoreOptions {
   // 文字
@@ -20,15 +21,6 @@ interface TextRect {
   top?: number
   width?: number
   height?: number
-}
-
-/**
- * 为元素设置CSS样式
- * @param el 元素
- * @param style 样式列表
- */
-function setStyle(el: HTMLElement, style: Partial<CSSStyleDeclaration>) {
-  merge(el.style, style)
 }
 
 function getTextRect(ctx: CanvasRenderingContext2D, font: string, text: string): TextRect {
