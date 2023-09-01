@@ -1,4 +1,4 @@
-import { getObjectType } from '@/_internal'
+import { getObjectType, isDate } from '@/_internal'
 
 describe('getObjectType', () => {
 
@@ -61,5 +61,20 @@ describe('getObjectType', () => {
       getObjectType(new RegExp('\\s'))
     ].every(o => o === 'RegExp')).toBeTruthy()
   })
+
+})
+
+describe('isDate', () => {
+
+  it('base', () => {
+    expect(isDate(new Date())).toBeTruthy()
+  })
+
+  it('other', () => {
+    expect(isDate(0)).toBeFalsy()
+    expect(isDate('')).toBeFalsy()
+    expect(isDate({})).toBeFalsy()
+  })
+
 
 })
