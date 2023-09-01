@@ -1,5 +1,5 @@
 import path from 'path'
-import { defineConfig } from 'rollup'
+import { InputPluginOption, defineConfig } from 'rollup'
 import alias from '@rollup/plugin-alias'
 import { babel } from '@rollup/plugin-babel'
 import sizes from '@atomico/rollup-plugin-sizes'
@@ -12,6 +12,14 @@ import strip from '@rollup/plugin-strip'
 import config from './config'
 import { dts } from 'rollup-plugin-dts'
 
+const plugins: InputPluginOption[] = [
+  alias({
+    entries: {
+      '@': config.SRC_ROOT,
+    }
+  }),
+]
+
 export default [
   defineConfig({
     input: config.input,
@@ -19,13 +27,12 @@ export default [
       dir: config.OUT_ROOT,
       format: 'esm',
     }],
-    external: Object.keys((pkg as any).peerDependencies || {}),
+    external: [
+      ...Object.keys((pkg as any).peerDependencies || {}),
+      /^\@babel\/runtime/,
+    ],
     plugins: [
-      alias({
-        entries: {
-          '@': config.SRC_ROOT,
-        }
-      }),
+      ...plugins,
       clear({
         targets: [config.OUT_ROOT],
       }),
@@ -53,6 +60,7 @@ export default [
       dir: config.OUT_ROOT,
     },
     plugins: [
+      ...plugins,
       dts({
         compilerOptions: {
           preserveSymlinks: false,

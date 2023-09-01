@@ -1,6 +1,18 @@
 {
-  "name": "tools",
-  "version": "0.0.1",
+  "name": "@shoppingzh/tools",
+  "version": "0.0.2",
+  "author": {
+    "name": "Shopping",
+    "email": "xpzheng6@163.com",
+    "url": "https://zhengxiaoping.xyz/"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "dev": "rollup -c scripts/rollup.config.ts --configPlugin=typescript={tsconfig:'scripts/tsconfig.build.json'} --bundleConfigAsCjs --watch --environment NODE_ENV:dev",
     "build": "rollup -c scripts/rollup.config.ts --configPlugin=typescript={tsconfig:'scripts/tsconfig.build.json'} --bundleConfigAsCjs --environment NODE_ENV:prod",
@@ -8,7 +20,8 @@
     "format": "eslint . --fix",
     "test": "jest",
     "test:cov": "jest --coverage",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "pub": "pnpm test && pnpm build && npm publish"
   },
   "devDependencies": {
     "@atomico/rollup-plugin-sizes": "^1.1.4",
@@ -16,6 +29,7 @@
     "@babel/plugin-transform-runtime": "^7.22.4",
     "@babel/preset-env": "^7.22.4",
     "@babel/preset-typescript": "^7.21.5",
+    "@babel/runtime": "^7.22.11",
     "@commitlint/cli": "^17.6.5",
     "@commitlint/config-conventional": "^17.6.5",
     "@rollup/plugin-alias": "^3.1.9",
