@@ -1,5 +1,7 @@
 const objectProto = Object.prototype
 
+export type ObjectKeyType = string | number | symbol
+
 function getObjectTag(value: any): string {
   return objectProto.toString.call(value)
 }
