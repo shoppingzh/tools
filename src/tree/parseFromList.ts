@@ -22,24 +22,24 @@ interface Node {
 /**
  * 从集合解析树
  * 
- * @param collection 集合
+ * @param list 集合
  * @param props 属性配置
  * @returns 
  */
-export function parseFromCollection<S extends object, R extends S & Node>(collection: S[], props?: Props<S, R>): R[] {
+export function parseFromList<S extends object, R extends S & Node>(list: S[], props?: Props<S, R>): R[] {
   const mergedProps: Props<S, R> = merge({}, DEFAULT_PROPS, props)
   const map: Record<any, R> = Object.create(null)
   const nodes: R[] = []
 
   // 先构建一个哈希表，以便速查
-  for (const item of collection) {
+  for (const item of list) {
     const id = getObjectPropValue(item, mergedProps.id)
     if (id == null) continue
     map[id as any] = item as unknown as R
   }
 
   // 构建树
-  for (const item of (collection as unknown as R[])) {
+  for (const item of (list as unknown as R[])) {
     const pid = getObjectPropValue(item, mergedProps.pid)
     if (pid == null) {
       nodes.push(item)

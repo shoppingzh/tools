@@ -1,6 +1,6 @@
-import { parseFromCollection } from '@/tree'
+import { parseFromList } from '@/tree'
 
-describe('parseFromCollection', () => {
+describe('parseFromList', () => {
 
   function createData() {
     return [
@@ -18,7 +18,7 @@ describe('parseFromCollection', () => {
   }
 
   it('base', () => {
-    expect(parseFromCollection(createData())).toEqual([
+    expect(parseFromList(createData())).toEqual([
       {
         id: 1,
         name: '1',
@@ -59,7 +59,7 @@ describe('parseFromCollection', () => {
   })
 
   it('props: custom id', () => {
-    expect(parseFromCollection(createData(), {
+    expect(parseFromList(createData(), {
       id: o => o.id * o.id,
     })).toEqual([
       {
@@ -97,10 +97,13 @@ describe('parseFromCollection', () => {
   })
 
   it('props: custom pid', () => {
-    expect(parseFromCollection(createData(), {
+    expect(parseFromList(createData(), {
       pid: () => undefined
     }).map(o => o.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
   })
 
+  it('list is null', () => {
+    expect(() => parseFromList(null)).toThrow()
+  })
 
 })

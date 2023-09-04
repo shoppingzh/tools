@@ -1,1 +1,1 @@
-export * from './parseFromCollection'
+export * from './parseFromList'
