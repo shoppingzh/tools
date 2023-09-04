@@ -56,8 +56,8 @@ function renderWatermark(text: string, options: RenderWatermarkOptions) {
   const textRect = getTextRect(ctx, font, text)
 
   // 2. 根据文字边界与间距确定画布大小
-  canvas.width = textRect.width + (Math.abs(opts.padding[0]) * 2)
-  canvas.height = textRect.height + (Math.abs(opts.padding[1]) * 2)
+  canvas.width = textRect.width + Math.abs(opts.padding[0])
+  canvas.height = textRect.height + Math.abs(opts.padding[1])
 
   // 3. 绘制背景
   if (opts.bgColor) {
@@ -90,9 +90,7 @@ function renderWatermark(text: string, options: RenderWatermarkOptions) {
   return canvas
 }
 
-export interface CreateWatermarkOptions extends WatermarkCoreOptions {
-  zIndex?: number
-}
+export type CreateWatermarkOptions = WatermarkCoreOptions
 
 const DEFAULT_CREATE_WATERMARK_OPTIONS: CreateWatermarkOptions = {
   fontFamily: '微软雅黑',
@@ -102,8 +100,7 @@ const DEFAULT_CREATE_WATERMARK_OPTIONS: CreateWatermarkOptions = {
   fontItalic: false,
   rotate: -10,
   bgColor: 'rgba(0, 0, 0, 0)',
-  padding: [30, 50],
-  zIndex: 99999999,
+  padding: [100, 100]
 }
 
 /**
@@ -129,8 +126,7 @@ export function createWatermark(el: HTMLElement | HTMLCanvasElement, text: strin
     const dataUrl = watermarkCanvas.toDataURL('image/png')
     setStyle(el, {
       backgroundImage: `url(${dataUrl})`,
-      backgroundRepeat: 'repeat',
-      zIndex: String(opts.zIndex),
+      backgroundRepeat: 'repeat'
     })
   }
 }
