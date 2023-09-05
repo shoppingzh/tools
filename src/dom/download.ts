@@ -44,3 +44,18 @@ export function downloadBlob(blob: Blob, filename?: string) {
   download(url, filename, false)
   URL.revokeObjectURL(url)
 }
+
+/**
+ * 静默下载(通过iframe)
+ * 
+ * @param url 下载链接
+ */
+export function downloadSilent(url: string) {
+  const el = document.createElement('iframe')
+  setStyle(el, { display: 'none' })
+  el.src = url
+  el.onload = () => {
+    document.body.removeChild(el)
+  }
+  document.body.appendChild(el)
+}
