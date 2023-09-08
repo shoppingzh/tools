@@ -52,7 +52,8 @@ export function parseFromList<S extends object, R extends S & Node>(list: S[], p
         }
         children.push(item)
       } else {
-        console.warn('存在游离节点')
+        // FIXME 需不需要警告？
+        // console.warn('存在游离节点')
       }
     }
   }
