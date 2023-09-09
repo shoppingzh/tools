@@ -4,7 +4,7 @@
  * @param paths 路径列表
  * @returns 
  */
-export function join(...paths: string[]) {
+export function join(...paths: string[]): string {
   const len = paths.length
   let result = ''
   if (!len) return result
