@@ -50,7 +50,7 @@ export function downloadBlob(blob: Blob, filename?: string) {
  * 
  * @param url 下载链接
  */
-export function downloadSilent(url: string) {
+export function downloadSilent(url: string): void {
   const el = document.createElement('iframe')
   setStyle(el, { display: 'none' })
   el.src = url
