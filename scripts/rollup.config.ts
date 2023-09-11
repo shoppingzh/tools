@@ -26,6 +26,10 @@ export default [
     output: [{
       dir: config.OUT_ROOT,
       format: 'esm',
+    }, {
+      dir: config.OUT_ROOT,
+      format: 'cjs',
+      entryFileNames: '[name].cjs',
     }],
     external: [
       ...Object.keys((pkg as any).peerDependencies || {}),
