@@ -1,6 +1,6 @@
 import { format } from '@/number'
 
-it('base', () => {
+it('normal', () => {
   type Pair = [number, string]
   const pairs: Pair[] = [
     [0, '0.00'],
