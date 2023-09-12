@@ -1,4 +1,4 @@
-import { ObjectKeyType } from '@/_internal'
+import { getObjectPropValue, ObjectKeyType } from '@/_internal'
 
 /**
  * 将数组转为一个对象map
@@ -11,15 +11,8 @@ export function toMap<T extends object>(arr: T[], keyOrMapKey: (keyof T) | ((o: 
   const map: Record<ObjectKeyType, T> = Object.create(null) // 一定要注意！不能直接使用{}，否则会带上Object.prototype的属性！
 
   arr.forEach(o => {
-    let key: ObjectKeyType
-    if (typeof keyOrMapKey === 'function') {
-      key = keyOrMapKey(o)
-    } else {
-      key = (o as any)[keyOrMapKey]
-    }
-
-    map[key] = o
+    const key = getObjectPropValue(o, keyOrMapKey)
+    map[key as ObjectKeyType] = o
   })
-
   return map
 }
