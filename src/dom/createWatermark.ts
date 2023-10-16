@@ -1,6 +1,6 @@
 import { getObjectType } from '@/_internal'
 import { merge } from 'lodash'
-import { setStyle } from '.'
+import { setStyle } from './setStyle'
 
 interface WatermarkCoreOptions {
   // 文字
