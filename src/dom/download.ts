@@ -1,4 +1,4 @@
-import { setStyle } from '.'
+import { setStyle } from './base'
 
 /**
  * 下载

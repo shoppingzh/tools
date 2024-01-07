@@ -19,6 +19,7 @@ const plugins: InputPluginOption[] = [
     }
   }),
 ]
+const external = Object.keys(pkg.peerDependencies || {}).map(pkg => new RegExp(`^${pkg}`))
 
 export default [
   defineConfig({
@@ -31,10 +32,7 @@ export default [
       format: 'cjs',
       entryFileNames: '[name].cjs',
     }],
-    external: [
-      ...Object.keys((pkg as any).peerDependencies || {}),
-      /^\@babel\/runtime/,
-    ],
+    external,
     plugins: [
       ...plugins,
       clear({
@@ -45,6 +43,7 @@ export default [
       }),
       config.isProdEnv && babel({
         babelHelpers: 'runtime',
+        extensions: ['.ts'],
       }),
       // 去除console.log
       config.isProdEnv && strip({
@@ -63,6 +62,7 @@ export default [
     output: {
       dir: config.OUT_ROOT,
     },
+    external,
     plugins: [
       ...plugins,
       dts({
