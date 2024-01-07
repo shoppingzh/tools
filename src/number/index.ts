@@ -1,2 +1,2 @@
 export * from './format'
-export * from './formatChinese'
+// export * from './formatChinese'
