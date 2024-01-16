@@ -7,6 +7,6 @@ module.exports = {
   },
   testPathIgnorePatterns: [
     '__tests__/number/formatChinese.ts',
-    '__tests__/datetime'
+    // '__tests__/datetime',
   ]
 }
