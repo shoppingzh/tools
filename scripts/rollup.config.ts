@@ -41,7 +41,7 @@ export default [
       ts({
         tsconfig: path.resolve(__dirname, '../tsconfig.json'),
       }),
-      config.isProdEnv && babel({
+      config.isProdEnv && config.useBabel && babel({
         babelHelpers: 'runtime',
         extensions: ['.ts'],
       }),

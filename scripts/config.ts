@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import env from './env'
 
 const SRC_ROOT = path.resolve(__dirname, '../src')
 const OUT_ROOT = path.resolve(__dirname, '../lib')
@@ -10,7 +11,6 @@ const input = entries.reduce((map, o) => {
   return map
 }, {} as Record<string, string>)
 
-const env = process.env.NODE_ENV
 
 export default {
   SRC_ROOT,
@@ -18,6 +18,7 @@ export default {
   entries,
   input,
   env,
-  isDevEnv: env === 'dev',
-  isProdEnv: env === 'prod',
+  isDevEnv: env.NODE_ENV === 'dev',
+  isProdEnv: env.NODE_ENV === 'prod',
+  useBabel: false, // 是否使用babel转译
 }
