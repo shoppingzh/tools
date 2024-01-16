@@ -18,16 +18,15 @@ function dates(strList: string[], startOf?: UnitType, endOf?: UnitType) {
 
 it('normal', () => {
   expect(getBetweenDates(
-    dayjs('2023-10-16').toDate(),
-    dayjs('2023-10-20').toDate(),
+    date('2023-10-16 00:00:00.001'),
+    date('2023-10-20 00:00:00.000'),
     'day'
-  )).toEqual([
-    dayjs('2023-10-16').toDate(),
-    dayjs('2023-10-17').toDate(),
-    dayjs('2023-10-18').toDate(),
-    dayjs('2023-10-19').toDate(),
-    dayjs('2023-10-20').toDate(),
-  ])
+  )).toEqual(dates([
+    '2023-10-16 00:00:00.001',
+    '2023-10-17 00:00:00.001',
+    '2023-10-18 00:00:00.001',
+    '2023-10-19 00:00:00.001',
+  ]))
 })
 
 it('from/to is null', () => {
@@ -50,6 +49,23 @@ it('from/to is invalid date', () => {
   expect(getBetweenDates(new Date(), new Date(NaN), 'year')).toEqual([])
 })
 
+it('from = to', () => {
+  const now = new Date()
+  expect(getBetweenDates(now, now, 'year')).toEqual([now])
+  expect(getBetweenDates(now, now, 'month')).toEqual([now])
+  expect(getBetweenDates(now, now, 'week')).toEqual([now])
+  expect(getBetweenDates(now, now, 'day')).toEqual([now])
+  expect(getBetweenDates(now, now, 'hour')).toEqual([now])
+  expect(getBetweenDates(now, now, 'minute')).toEqual([now])
+  expect(getBetweenDates(now, now, 'second')).toEqual([now])
+})
+
+it('from > to', () => {
+  expect(getBetweenDates(date('2024-01-16'), date('2024-01-15'), 'day')).toEqual(dates([
+    '2024-01-16',
+    '2024-01-15',
+  ]))
+})
 
 it('unitType is null', () => {
   expect(() => getBetweenDates(new Date(), new Date(), undefined)).toThrow()
@@ -75,17 +91,17 @@ it('unitTypes', () => {
       to: '2027-01-16',
       data: ['2024-05-01', '2025-05-01', '2026-05-01']
     },
-    // {
-    //   type: 'quarter',
-    //   from: '2024-01-16',
-    //   to: '2024-12-01',
-    //   data: ['2024-01-16', '2024-01-16']
-    // },
     {
       type: 'month',
       from: '2024-01-16',
       to: '2024-05-01',
       data: ['2024-01-16', '2024-02-16', '2024-03-16', '2024-04-16']
+    },
+    {
+      type: 'week',
+      from: '2024-01-16',
+      to: '2024-02-04',
+      data: ['2024-01-16', '2024-01-23', '2024-01-30']
     },
     {
       type: 'day',

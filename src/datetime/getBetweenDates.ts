@@ -1,12 +1,10 @@
 import { isDate } from '@/_internal'
 import dayjs, { ManipulateType } from 'dayjs'
-// import 'dayjs/plugin/quarterOfYear'
 
-export type Type = 'year' | 'quarter' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second'
+export type Type = 'year' | 'month' | 'week' | 'day' | 'hour' | 'minute' | 'second'
 
 function mapManipulateType(type: Type): ManipulateType {
   if (type === 'year') return 'year'
-  // if (type === 'quarter') return ''
   if (type === 'month') return 'month'
   if (type === 'week') return 'week'
   if (type === 'day') return 'day'
@@ -25,9 +23,9 @@ function mapManipulateType(type: Type): ManipulateType {
  * @returns 
  */
 export function getBetweenDates(from: Date, to: Date, type: Type): Date[] {
-  if (!isDate(from) || !isDate(to)) throw new TypeError('日期类型错误，必须为Date对象')
+  if (!isDate(from) || !isDate(to)) throw new TypeError('日期/时间错误，必须为Date对象')
   const mType = mapManipulateType(type)
-  if (!mType) throw new TypeError('日期/时间计算类型错误')
+  if (!mType) throw new TypeError('type错误')
 
   const fromIns = dayjs(from)
   const toIns = dayjs(to)
