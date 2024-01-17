@@ -1,5 +1,8 @@
 // import { formatChinese } from '@/number'
 
+it('nop', () => {
+  // 
+})
 // type Pair = [number, string]
 
 // it('normal', () => {
