@@ -1,4 +1,4 @@
-import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption } from 'echarts'
+import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, LegendComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption } from 'echarts'
 import { merge } from 'lodash'
 
 interface Typeable<T extends string = string> {
@@ -36,71 +36,38 @@ interface ThemeSeries {
   themeRiver?: Partial<AndType<SeriesOption, 'themeRiver'>>
   custom?: Partial<AndType<SeriesOption, 'custom'>>
 }
-type BaseThemeOptionKeys = 'title'
-type BaseTheme = Partial<Pick<EChartsOption, BaseThemeOptionKeys>>
+interface ThemeLegend {
+  plain?: PlainLegendComponentOption
+  scroll?: ScrollableLegendComponentOption
+}
+interface ThemeDataZoom {
+  inside?: InsideDataZoomComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
+  slider?: SliderDataZoomComponentOption
+}
+interface ThemeVisualMap {
+  continuous?: ContinousVisualMapComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
+  piecewise?: PiecewiseVisualMapComponentOption
+}
+interface ThemeAxisPointer {
+  line?: Partial<AndType<AxisPointerComponentOption, 'line'>>
+  shadow?: Partial<AndType<AxisPointerComponentOption, 'shadow'>>
+  none?: Partial<AndType<AxisPointerComponentOption, 'none'>>
+}
+
+interface BaseTheme {
+  title?: TitleComponentOption
+  grid?: GridComponentOption
+  polar?: PolarComponentOption
+  radar?: RadarComponentOption
+}
 export interface Theme extends BaseTheme {
   axis?: ThemeAxis
   series?: ThemeSeries
+  legend?: ThemeLegend
+  dataZoom?: ThemeDataZoom
+  visualMap?: ThemeVisualMap
+  axisPointer?: ThemeAxisPointer
 }
-
-// const theme: Theme = {
-//   title: {
-
-//   },
-//   axis: {
-//     category: {
-//       // type: 'category',
-//       // type: 'category',
-//       // data: [],
-//       // type: 'category'
-//       data: [],
-//     },
-//     value: {
-//       scale: true,
-//     },
-//     time: {}
-//   },
-//   series: {
-//     line: {
-//       // 
-//       lineStyle: {},
-//     },
-//     bar: {
-//       barWidth: 10,
-//     },
-//     pie: {
-//       // radius: 
-//       radius: [],
-//     },
-//     scatter: {
-//       clip: true,
-//     },
-//     effectScatter: {
-//       rippleEffect: {}
-//     },
-//     radar: {
-//       radarId: '1',
-//     },
-//     tree: {
-//       initialTreeDepth: 1,
-//     },
-//     treemap: {
-//       leafDepth: 1,
-//     },
-//     sunburst: {
-//       stillShowZeroSum: true,
-//     },
-//     boxplot: {
-//       boxWidth: null,
-//     },
-//     candlestick: {
-//       barMaxWidth: 1,
-//     },
-//     heatmap: {
-
-//     },
-//   }
-// }
 
 function wrapArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : (value == null ? [] : [value])
@@ -116,6 +83,18 @@ function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: 
   })
 }
 
+
+// const o: EChartsOption = {
+//   axisPointer: [{
+//     type: 'cross'
+//   }, {
+//     type: 'line',
+
+//   }]
+// }
+// const theme: Theme = {
+// }
+
 /**
  * 使用主题配置加工echarts的配置项
  * 
@@ -127,18 +106,21 @@ function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: 
 export function withTheme(option: EChartsOption, theme: Theme): EChartsOption {
   if (!option) return null
   if (!theme) return option
+  const normalTypesOptionKeys: (keyof Theme)[] = ['series', 'legend', 'dataZoom', 'visualMap', 'axisPointer']
 
-  mergeTypes([...wrapArray(option.xAxis), ...wrapArray(option.yAxis)], theme.axis)
-  mergeTypes(wrapArray(option.series), theme.series)
-
-  const otherKeys: BaseThemeOptionKeys[] = ['title']
-  otherKeys.forEach(key => {
-    const currentOption = theme[key]
-    if (!currentOption) return
-    if (typeof option[key] === 'object' && option[key] != null) {
-      merge(option[key], currentOption)
+  Object.entries(option).forEach(([name, value]) => {
+    if (name === 'xAxis' || name === 'yAxis') {
+      mergeTypes([...wrapArray(option.xAxis), ...wrapArray(option.yAxis)], theme.axis)
+    } else if (normalTypesOptionKeys.includes(name as keyof Theme)) {
+      mergeTypes(wrapArray(option[name]), theme[name as keyof Theme])
     } else {
-      option[key] = currentOption
+      const themeValue = theme[name as keyof Theme]
+      const valueList = wrapArray(value)
+      if (valueList.length) {
+        valueList.forEach(valueItem => {
+          merge(valueItem, themeValue)
+        })
+      }
     }
   })
 
