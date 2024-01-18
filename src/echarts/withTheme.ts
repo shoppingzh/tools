@@ -1,16 +1,54 @@
-import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, LegendComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption } from 'echarts'
+import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, LegendComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption, RadiusAxisComponentOption, AngleAxisComponentOption, SingleAxisComponentOption, TimelineComponentOption, AriaComponentOption, TooltipComponentOption, ToolboxComponentOption, BrushComponentOption, GeoComponentOption, ParallelComponentOption, GraphicComponentOption, CalendarComponentOption } from 'echarts'
 import { merge } from 'lodash'
 
 interface Typeable<T extends string = string> {
   type?: T
 }
 type AndType<From, Type> = From & { type: Type }
+interface ThemeLegend {
+  plain?: PlainLegendComponentOption
+  scroll?: ScrollableLegendComponentOption
+}
 type AxisComponentOption = Partial<XAXisComponentOption | YAXisComponentOption>
 interface ThemeAxis {
   category?: Partial<AndType<AxisComponentOption, 'category'>>
   value?: Partial<AndType<AxisComponentOption, 'value'>>
   time?: Partial<AndType<AxisComponentOption, 'time'>>
   log?: Partial<AndType<AxisComponentOption, 'log'>>
+}
+interface ThemeRadiusAxis {
+  value?: Partial<AndType<RadiusAxisComponentOption, 'value'>>
+  category?: Partial<AndType<RadiusAxisComponentOption, 'category'>>
+  time?: Partial<AndType<RadiusAxisComponentOption, 'time'>>
+  log?: Partial<AndType<RadiusAxisComponentOption, 'log'>>
+}
+interface ThemeAngleAxis {
+  value?: Partial<AndType<AngleAxisComponentOption, 'value'>>
+  category?: Partial<AndType<AngleAxisComponentOption, 'category'>>
+  time?: Partial<AndType<AngleAxisComponentOption, 'time'>>
+  log?: Partial<AndType<AngleAxisComponentOption, 'log'>>
+}
+interface ThemeDataZoom {
+  inside?: InsideDataZoomComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
+  slider?: SliderDataZoomComponentOption
+}
+interface ThemeVisualMap {
+  continuous?: ContinousVisualMapComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
+  piecewise?: PiecewiseVisualMapComponentOption
+}
+interface ThemeAxisPointer {
+  line?: Partial<AndType<AxisPointerComponentOption, 'line'>>
+  shadow?: Partial<AndType<AxisPointerComponentOption, 'shadow'>>
+  none?: Partial<AndType<AxisPointerComponentOption, 'none'>>
+}
+interface ThemeSingleAxis {
+  value?: Partial<AndType<SingleAxisComponentOption, 'value'>>
+  category?: Partial<AndType<SingleAxisComponentOption, 'category'>>
+  time?: Partial<AndType<SingleAxisComponentOption, 'time'>>
+  log?: Partial<AndType<SingleAxisComponentOption, 'log'>>
+}
+interface ThemeTimeline {
+  slider?: Partial<TimelineComponentOption>
 }
 interface ThemeSeries {
   line?: Partial<AndType<SeriesOption, 'line'>>
@@ -36,38 +74,49 @@ interface ThemeSeries {
   themeRiver?: Partial<AndType<SeriesOption, 'themeRiver'>>
   custom?: Partial<AndType<SeriesOption, 'custom'>>
 }
-interface ThemeLegend {
-  plain?: PlainLegendComponentOption
-  scroll?: ScrollableLegendComponentOption
-}
-interface ThemeDataZoom {
-  inside?: InsideDataZoomComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
-  slider?: SliderDataZoomComponentOption
-}
-interface ThemeVisualMap {
-  continuous?: ContinousVisualMapComponentOption // 很奇怪，echarts在这里反常不使用type进行类型分发
-  piecewise?: PiecewiseVisualMapComponentOption
-}
-interface ThemeAxisPointer {
-  line?: Partial<AndType<AxisPointerComponentOption, 'line'>>
-  shadow?: Partial<AndType<AxisPointerComponentOption, 'shadow'>>
-  none?: Partial<AndType<AxisPointerComponentOption, 'none'>>
-}
 
 interface BaseTheme {
-  title?: TitleComponentOption
-  grid?: GridComponentOption
-  polar?: PolarComponentOption
-  radar?: RadarComponentOption
+  aria?: Partial<AriaComponentOption>
+  darkMode?: EChartsOption['darkMode']
+  backgroundColor?: EChartsOption['backgroundColor']
+  textStyle?: Partial<Pick<TitleComponentOption['textStyle'], 'color' | 'fontStyle' | 'fontWeight' | 'fontSize' | 'fontFamily'>>
+  animation?: EChartsOption['animation']
+  animationThreshold?: EChartsOption['animationThreshold']
+  animationDuration?: EChartsOption['animationDuration']
+  animationEasing?: EChartsOption['animationEasing']
+  animationDelay?: EChartsOption['animationDelay']
+  animationDurationUpdate?: EChartsOption['animationDurationUpdate']
+  animationEasingUpdate?: EChartsOption['animationEasingUpdate']
+  animationDelayUpdate?: EChartsOption['animationDelayUpdate']
+  stateAnimation?: Partial<EChartsOption['stateAnimation']>
+  useUTC?: EChartsOption['useUTC']
+  title?: Partial<TitleComponentOption>
+  grid?: Partial<GridComponentOption>
+  polar?: Partial<PolarComponentOption>
+  radar?: Partial<RadarComponentOption>
+  tooltip?: Partial<TooltipComponentOption>
+  toolbox?: Partial<ToolboxComponentOption>
+  brush?: Partial<BrushComponentOption>
+  geo?: Partial<GeoComponentOption>
+  parallel?: Partial<ParallelComponentOption>
+  parallelAxis?: Partial<EChartsOption['parallelAxis']> // FIXME 类型有问题
+  graphic?: Partial<GraphicComponentOption>
+  calendar?: Partial<CalendarComponentOption>
+  media?: Partial<EChartsOption['media']> // FIXME 类型有问题
 }
-export interface Theme extends BaseTheme {
-  axis?: ThemeAxis
-  series?: ThemeSeries
+interface TypedTheme {
   legend?: ThemeLegend
+  axis?: ThemeAxis
+  radiusAxis?: ThemeRadiusAxis
+  angleAxis?: ThemeAngleAxis
   dataZoom?: ThemeDataZoom
   visualMap?: ThemeVisualMap
   axisPointer?: ThemeAxisPointer
+  singleAxis?: ThemeSingleAxis
+  timeline?: ThemeTimeline
+  series?: ThemeSeries
 }
+export type Theme = BaseTheme & TypedTheme
 
 function wrapArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : (value == null ? [] : [value])
@@ -83,18 +132,6 @@ function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: 
   })
 }
 
-
-// const o: EChartsOption = {
-//   axisPointer: [{
-//     type: 'cross'
-//   }, {
-//     type: 'line',
-
-//   }]
-// }
-// const theme: Theme = {
-// }
-
 /**
  * 使用主题配置加工echarts的配置项
  * 
@@ -106,15 +143,19 @@ function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: 
 export function withTheme(option: EChartsOption, theme: Theme): EChartsOption {
   if (!option) return null
   if (!theme) return option
-  const normalTypesOptionKeys: (keyof Theme)[] = ['series', 'legend', 'dataZoom', 'visualMap', 'axisPointer']
+  const normalTypesOptionKeys: (keyof TypedTheme)[]
+    = ['legend', 'axis', 'radiusAxis', 'angleAxis', 'dataZoom', 'visualMap', 'axisPointer', 'singleAxis', 'timeline', 'series']
+  const nonobjectOptionKeys: (keyof BaseTheme)[] = ['darkMode', 'backgroundColor', 'animation', 'animationThreshold', 'animationDuration', 'animationEasing', 'animationDelay', 'animationDurationUpdate', 'animationEasingUpdate', 'animationDelayUpdate', 'useUTC']
 
   Object.entries(option).forEach(([name, value]) => {
+    const themeValue = theme[name as keyof Theme]
     if (name === 'xAxis' || name === 'yAxis') {
       mergeTypes([...wrapArray(option.xAxis), ...wrapArray(option.yAxis)], theme.axis)
-    } else if (normalTypesOptionKeys.includes(name as keyof Theme)) {
-      mergeTypes(wrapArray(option[name]), theme[name as keyof Theme])
+    } else if (normalTypesOptionKeys.includes(name as keyof TypedTheme)) {
+      mergeTypes(wrapArray(option[name]), theme[name as keyof TypedTheme])
+    } else if (nonobjectOptionKeys.includes(name as keyof BaseTheme)) {
+      option[name] = themeValue
     } else {
-      const themeValue = theme[name as keyof Theme]
       const valueList = wrapArray(value)
       if (valueList.length) {
         valueList.forEach(valueItem => {
