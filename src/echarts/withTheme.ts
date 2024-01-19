@@ -1,9 +1,6 @@
 import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, LegendComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption, RadiusAxisComponentOption, AngleAxisComponentOption, SingleAxisComponentOption, TimelineComponentOption, AriaComponentOption, TooltipComponentOption, ToolboxComponentOption, BrushComponentOption, GeoComponentOption, ParallelComponentOption, GraphicComponentOption, CalendarComponentOption } from 'echarts'
 import { merge } from 'lodash'
 
-interface Typeable<T extends string = string> {
-  type?: T
-}
 type AndType<From, Type> = From & { type: Type }
 interface ThemeLegend {
   plain?: PlainLegendComponentOption
@@ -75,11 +72,10 @@ interface ThemeSeries {
   custom?: Partial<AndType<SeriesOption, 'custom'>>
 }
 
-interface BaseTheme {
-  aria?: Partial<AriaComponentOption>
+/** 非对象配置 */
+interface NonobjectTheme {
   darkMode?: EChartsOption['darkMode']
   backgroundColor?: EChartsOption['backgroundColor']
-  textStyle?: Partial<Pick<TitleComponentOption['textStyle'], 'color' | 'fontStyle' | 'fontWeight' | 'fontSize' | 'fontFamily'>>
   animation?: EChartsOption['animation']
   animationThreshold?: EChartsOption['animationThreshold']
   animationDuration?: EChartsOption['animationDuration']
@@ -88,8 +84,15 @@ interface BaseTheme {
   animationDurationUpdate?: EChartsOption['animationDurationUpdate']
   animationEasingUpdate?: EChartsOption['animationEasingUpdate']
   animationDelayUpdate?: EChartsOption['animationDelayUpdate']
-  stateAnimation?: Partial<EChartsOption['stateAnimation']>
   useUTC?: EChartsOption['useUTC']
+  color?: Partial<EChartsOption['color']> // FIXME 类型有问题 
+}
+/** 不区分类型的对象配置 */
+interface UnTypedObjectTheme {
+  aria?: Partial<AriaComponentOption>
+  textStyle?: Partial<Pick<TitleComponentOption['textStyle'], 'color' | 'fontStyle' | 'fontWeight' | 'fontSize' | 'fontFamily'>>
+  stateAnimation?: Partial<EChartsOption['stateAnimation']>
+
   title?: Partial<TitleComponentOption>
   grid?: Partial<GridComponentOption>
   polar?: Partial<PolarComponentOption>
@@ -104,7 +107,8 @@ interface BaseTheme {
   calendar?: Partial<CalendarComponentOption>
   media?: Partial<EChartsOption['media']> // FIXME 类型有问题
 }
-interface TypedTheme {
+/** 区分类型的对象配置 */
+interface TypedObjectTheme {
   legend?: ThemeLegend
   axis?: ThemeAxis
   radiusAxis?: ThemeRadiusAxis
@@ -116,26 +120,157 @@ interface TypedTheme {
   timeline?: ThemeTimeline
   series?: ThemeSeries
 }
-export type Theme = BaseTheme & TypedTheme
+type ObjectTheme = UnTypedObjectTheme & TypedObjectTheme
+export type Theme = NonobjectTheme & ObjectTheme
+
+interface MergeOption {
+  /** echarts 配置项名称 */
+  optionName: keyof EChartsOption
+  /** 主题配置项名称 */
+  themeName: keyof Theme
+  /** 合并策略 passive：被动合并，echarts配置有值，才合并主题配置 active：主动合并，不管echarts配置是否有值，主动合并主题配置 */
+  strategy: 'passive' | 'active'
+  /** echarts配置按照类型进行分发的类型列名，如果分发，则从主题配置项中寻找下一级内容进行合并 */
+  optionTypeKey?: string
+}
+
+const MERGE_OPTIONS: MergeOption[] = [
+  { optionName: 'darkMode', themeName: 'darkMode', strategy: 'active', },
+  { optionName: 'backgroundColor', themeName: 'backgroundColor', strategy: 'active', },
+  { optionName: 'animation', themeName: 'animation', strategy: 'active', },
+  { optionName: 'animationThreshold', themeName: 'animationThreshold', strategy: 'active', },
+  { optionName: 'animationDuration', themeName: 'animationDuration', strategy: 'active', },
+  { optionName: 'animationEasing', themeName: 'animationEasing', strategy: 'active', },
+  { optionName: 'animationDelay', themeName: 'animationDelay', strategy: 'active', },
+  { optionName: 'animationDurationUpdate', themeName: 'animationDurationUpdate', strategy: 'active', },
+  { optionName: 'animationEasingUpdate', themeName: 'animationEasingUpdate', strategy: 'active', },
+  { optionName: 'animationDelayUpdate', themeName: 'animationDelayUpdate', strategy: 'active', },
+  { optionName: 'useUTC', themeName: 'useUTC', strategy: 'active', },
+  { optionName: 'color', themeName: 'color', strategy: 'active', },
+
+  { optionName: 'legend', themeName: 'legend', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'xAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'yAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'radiusAxis', themeName: 'radiusAxis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'angleAxis', themeName: 'angleAxis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'dataZoom', themeName: 'dataZoom', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'visualMap', themeName: 'visualMap', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'axisPointer', themeName: 'axisPointer', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'singleAxis', themeName: 'singleAxis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'timeline', themeName: 'timeline', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'series', themeName: 'series', strategy: 'passive', optionTypeKey: 'type', },
+
+  // 下面这三个待定
+  { optionName: 'aria', themeName: 'aria', strategy: 'passive', },
+  { optionName: 'textStyle', themeName: 'textStyle', strategy: 'passive', },
+  { optionName: 'stateAnimation', themeName: 'stateAnimation', strategy: 'passive', },
+
+  { optionName: 'title', themeName: 'title', strategy: 'passive', },
+  { optionName: 'grid', themeName: 'grid', strategy: 'passive', },
+  { optionName: 'polar', themeName: 'polar', strategy: 'passive', },
+  { optionName: 'radar', themeName: 'radar', strategy: 'passive', },
+  { optionName: 'tooltip', themeName: 'tooltip', strategy: 'passive', },
+  { optionName: 'toolbox', themeName: 'toolbox', strategy: 'passive', },
+  { optionName: 'brush', themeName: 'brush', strategy: 'passive', },
+  { optionName: 'geo', themeName: 'geo', strategy: 'passive', },
+  { optionName: 'parallel', themeName: 'parallel', strategy: 'passive', },
+  { optionName: 'parallelAxis', themeName: 'parallelAxis', strategy: 'passive', },
+  { optionName: 'graphic', themeName: 'graphic', strategy: 'passive', },
+  { optionName: 'calendar', themeName: 'calendar', strategy: 'passive', },
+  { optionName: 'media', themeName: 'media', strategy: 'passive', },
+]
+
+// /** 非对象的主题配置名，可直接覆盖 */
+// const NON_OBJECT_THEME_NAMES: (keyof Theme)[] = [
+//   'darkMode',
+//   'backgroundColor',
+//   'animation',
+//   'animationThreshold',
+//   'animationDuration',
+//   'animationEasing',
+//   'animationDelay',
+//   'animationDurationUpdate',
+//   'animationEasingUpdate',
+//   'animationDelayUpdate',
+//   'useUTC',
+//   'color',
+// ]
+
+// /** 分类型对象配置名，需要按照类型进行分发 */
+// const TYPED_OPTION_NAMES: (keyof EChartsOption)[] = [
+//   'legend',
+//   'xAxis',
+//   'yAxis',
+//   'radiusAxis',
+//   'angleAxis',
+//   'dataZoom',
+//   'visualMap',
+//   'axisPointer',
+//   'singleAxis',
+//   'timeline',
+//   'series',
+// ]
+// const UN_TYPED_OPTION_KEYS: (keyof EChartsOption)[] = [
+//   'aria',
+//   'textStyle',
+//   'stateAnimation',
+//   'title',
+//   'grid',
+//   'polar',
+//   'radar',
+//   'tooltip',
+//   'toolbox',
+//   'brush',
+//   'geo',
+//   'parallel',
+//   'parallelAxis',
+//   'graphic',
+//   'calendar',
+//   'media',
+// ]
 
 function wrapArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : (value == null ? [] : [value])
 }
 
-function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: Partial<Record<Type, any>>) {
-  if (!types || !typeableList || !typeableList.length) return
-  typeableList.forEach(item => {
-    if (!item) return
-    const config = types[item.type]
-    if (!config) return
-    merge(item, config)
-  })
+function coverOrMerge<T extends object>(object: T, key: keyof T, mergeValue: any) {
+  if (!object) return
+  const value = object[key]
+  if (typeof value === 'object' && value !== null) {
+    merge(value, mergeValue)
+  } else {
+    object[key] = mergeValue
+  }
 }
+
+function mergePassive(option: EChartsOption, optionName: keyof EChartsOption, theme: Theme, themeName: keyof Theme, typeKey?: string) {
+  const optionValue: any = option[optionName]
+  const themeValue = theme[themeName]
+  if (optionValue == null || themeValue == null) return
+
+  if (typeof optionValue === 'object') {
+    const optionValueList = wrapArray(optionValue)
+    optionValueList.forEach(subOptionValue => {
+      if (subOptionValue == null) return
+      let subThemeValue = themeValue
+      // 设置了类型，从下级中找具体配置
+      if (typeKey) {
+        const type = subOptionValue[typeKey]
+        subThemeValue = (themeValue as any)[type] // FIXME 强化类型
+      }
+      if (!subThemeValue) return
+
+      merge(subOptionValue, subThemeValue)
+    })
+  } else {
+    coverOrMerge(option, optionName, themeValue)
+  }
+}
+
 
 /**
  * 使用主题配置加工echarts的配置项
  * 
- * 请注意：xAxis/yAxis/series一定要有type，该函数内部使用type区分不同的主题配置进行合并
  * @param option echarts option
  * @param theme 主题配置
  * @returns 
@@ -143,27 +278,17 @@ function mergeTypes<Type extends string>(typeableList: Typeable<Type>[], types: 
 export function withTheme(option: EChartsOption, theme: Theme): EChartsOption {
   if (!option) return null
   if (!theme) return option
-  const normalTypesOptionKeys: (keyof TypedTheme)[]
-    = ['legend', 'axis', 'radiusAxis', 'angleAxis', 'dataZoom', 'visualMap', 'axisPointer', 'singleAxis', 'timeline', 'series']
-  const nonobjectOptionKeys: (keyof BaseTheme)[] = ['darkMode', 'backgroundColor', 'animation', 'animationThreshold', 'animationDuration', 'animationEasing', 'animationDelay', 'animationDurationUpdate', 'animationEasingUpdate', 'animationDelayUpdate', 'useUTC']
 
-  Object.entries(option).forEach(([name, value]) => {
-    const themeValue = theme[name as keyof Theme]
-    if (name === 'xAxis' || name === 'yAxis') {
-      mergeTypes([...wrapArray(option.xAxis), ...wrapArray(option.yAxis)], theme.axis)
-    } else if (normalTypesOptionKeys.includes(name as keyof TypedTheme)) {
-      mergeTypes(wrapArray(option[name]), theme[name as keyof TypedTheme])
-    } else if (nonobjectOptionKeys.includes(name as keyof BaseTheme)) {
-      option[name] = themeValue
-    } else {
-      const valueList = wrapArray(value)
-      if (valueList.length) {
-        valueList.forEach(valueItem => {
-          merge(valueItem, themeValue)
-        })
-      }
+  MERGE_OPTIONS.forEach((mergeOption) => {
+    const { optionName, themeName, strategy, optionTypeKey } = mergeOption
+    const themeValue = theme[themeName]
+    if (themeValue == null) return // 主题配置没有值，无论如何都不合并
+
+    if (strategy === 'active') {
+      coverOrMerge(option, optionName, themeValue)
+    } else if (strategy === 'passive') {
+      mergePassive(option, optionName, theme, themeName, optionTypeKey)
     }
   })
-
   return option
 }
