@@ -45,3 +45,14 @@ export function isDate(value: any): value is Date {
 export function getObjectPropValue<T, R>(object: T, keyOrMap: FindObjectValue<T, R>) {
   return typeof keyOrMap === 'function' ? keyOrMap(object) : object[keyOrMap]
 }
+
+
+/**
+ * 包装为数组
+ * 
+ * @param value 
+ * @returns 
+ */
+export function wrapArray<T>(value: T | T[]) {
+  return Array.isArray(value) ? value : (value == null ? [] : [value])
+}

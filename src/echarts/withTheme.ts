@@ -1,4 +1,5 @@
-import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, LegendComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption, RadiusAxisComponentOption, AngleAxisComponentOption, SingleAxisComponentOption, TimelineComponentOption, AriaComponentOption, TooltipComponentOption, ToolboxComponentOption, BrushComponentOption, GeoComponentOption, ParallelComponentOption, GraphicComponentOption, CalendarComponentOption } from 'echarts'
+import { wrapArray } from '@/_internal'
+import type { EChartsOption, XAXisComponentOption, YAXisComponentOption, SeriesOption, SliderDataZoomComponentOption, InsideDataZoomComponentOption, ContinousVisualMapComponentOption, PiecewiseVisualMapComponentOption, AxisPointerComponentOption, TitleComponentOption, GridComponentOption, PolarComponentOption, RadarComponentOption, PlainLegendComponentOption, ScrollableLegendComponentOption, RadiusAxisComponentOption, AngleAxisComponentOption, SingleAxisComponentOption, TimelineComponentOption, AriaComponentOption, TooltipComponentOption, ToolboxComponentOption, BrushComponentOption, GeoComponentOption, ParallelComponentOption, GraphicComponentOption, CalendarComponentOption } from 'echarts'
 import { merge } from 'lodash'
 
 type AndType<From, Type> = From & { type: Type }
@@ -180,58 +181,6 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'media', themeName: 'media', strategy: 'passive', },
 ]
 
-// /** 非对象的主题配置名，可直接覆盖 */
-// const NON_OBJECT_THEME_NAMES: (keyof Theme)[] = [
-//   'darkMode',
-//   'backgroundColor',
-//   'animation',
-//   'animationThreshold',
-//   'animationDuration',
-//   'animationEasing',
-//   'animationDelay',
-//   'animationDurationUpdate',
-//   'animationEasingUpdate',
-//   'animationDelayUpdate',
-//   'useUTC',
-//   'color',
-// ]
-
-// /** 分类型对象配置名，需要按照类型进行分发 */
-// const TYPED_OPTION_NAMES: (keyof EChartsOption)[] = [
-//   'legend',
-//   'xAxis',
-//   'yAxis',
-//   'radiusAxis',
-//   'angleAxis',
-//   'dataZoom',
-//   'visualMap',
-//   'axisPointer',
-//   'singleAxis',
-//   'timeline',
-//   'series',
-// ]
-// const UN_TYPED_OPTION_KEYS: (keyof EChartsOption)[] = [
-//   'aria',
-//   'textStyle',
-//   'stateAnimation',
-//   'title',
-//   'grid',
-//   'polar',
-//   'radar',
-//   'tooltip',
-//   'toolbox',
-//   'brush',
-//   'geo',
-//   'parallel',
-//   'parallelAxis',
-//   'graphic',
-//   'calendar',
-//   'media',
-// ]
-
-function wrapArray<T>(value: T | T[]) {
-  return Array.isArray(value) ? value : (value == null ? [] : [value])
-}
 
 function coverOrMerge<T extends object>(object: T, key: keyof T, mergeValue: any) {
   if (!object) return
