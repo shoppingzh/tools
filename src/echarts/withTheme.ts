@@ -150,6 +150,9 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'animationDelayUpdate', themeName: 'animationDelayUpdate', strategy: 'active', },
   { optionName: 'useUTC', themeName: 'useUTC', strategy: 'active', },
   { optionName: 'color', themeName: 'color', strategy: 'active', },
+  { optionName: 'textStyle', themeName: 'textStyle', strategy: 'active', },
+  { optionName: 'stateAnimation', themeName: 'stateAnimation', strategy: 'active', },
+  { optionName: 'aria', themeName: 'aria', strategy: 'active', },
 
   { optionName: 'legend', themeName: 'legend', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'plain', },
   { optionName: 'xAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'category', },
@@ -162,11 +165,6 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'singleAxis', themeName: 'singleAxis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'value', },
   { optionName: 'timeline', themeName: 'timeline', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'slider', },
   { optionName: 'series', themeName: 'series', strategy: 'passive', optionTypeKey: 'type', },
-
-  // 下面这三个待定
-  { optionName: 'aria', themeName: 'aria', strategy: 'passive', },
-  { optionName: 'textStyle', themeName: 'textStyle', strategy: 'passive', },
-  { optionName: 'stateAnimation', themeName: 'stateAnimation', strategy: 'passive', },
 
   { optionName: 'title', themeName: 'title', strategy: 'passive', },
   { optionName: 'grid', themeName: 'grid', strategy: 'passive', },
