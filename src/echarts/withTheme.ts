@@ -154,13 +154,13 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'legend', themeName: 'legend', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'plain', },
   { optionName: 'xAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'category', },
   { optionName: 'yAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'value', },
-  { optionName: 'radiusAxis', themeName: 'radiusAxis', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'angleAxis', themeName: 'angleAxis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'radiusAxis', themeName: 'radiusAxis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'value', },
+  { optionName: 'angleAxis', themeName: 'angleAxis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'category', },
   { optionName: 'dataZoom', themeName: 'dataZoom', strategy: 'passive', optionTypeKey: 'type', },
   { optionName: 'visualMap', themeName: 'visualMap', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'axisPointer', themeName: 'axisPointer', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'singleAxis', themeName: 'singleAxis', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'timeline', themeName: 'timeline', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'axisPointer', themeName: 'axisPointer', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'line', },
+  { optionName: 'singleAxis', themeName: 'singleAxis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'value', },
+  { optionName: 'timeline', themeName: 'timeline', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'slider', },
   { optionName: 'series', themeName: 'series', strategy: 'passive', optionTypeKey: 'type', },
 
   // 下面这三个待定
