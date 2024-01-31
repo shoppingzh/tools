@@ -133,6 +133,8 @@ interface MergeOption {
   strategy: 'passive' | 'active'
   /** echarts配置按照类型进行分发的类型列名，如果分发，则从主题配置项中寻找下一级内容进行合并 */
   optionTypeKey?: string
+  /** 如果echarts配置没有设置类型，则按照默认类型进行分发 */
+  defaultOptionType?: string
 }
 
 const MERGE_OPTIONS: MergeOption[] = [
@@ -149,9 +151,9 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'useUTC', themeName: 'useUTC', strategy: 'active', },
   { optionName: 'color', themeName: 'color', strategy: 'active', },
 
-  { optionName: 'legend', themeName: 'legend', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'xAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', },
-  { optionName: 'yAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', },
+  { optionName: 'legend', themeName: 'legend', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'plain', },
+  { optionName: 'xAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'category', },
+  { optionName: 'yAxis', themeName: 'axis', strategy: 'passive', optionTypeKey: 'type', defaultOptionType: 'value', },
   { optionName: 'radiusAxis', themeName: 'radiusAxis', strategy: 'passive', optionTypeKey: 'type', },
   { optionName: 'angleAxis', themeName: 'angleAxis', strategy: 'passive', optionTypeKey: 'type', },
   { optionName: 'dataZoom', themeName: 'dataZoom', strategy: 'passive', optionTypeKey: 'type', },
@@ -181,7 +183,6 @@ const MERGE_OPTIONS: MergeOption[] = [
   { optionName: 'media', themeName: 'media', strategy: 'passive', },
 ]
 
-
 function coverOrMerge<T extends object>(object: T, key: keyof T, mergeValue: any) {
   if (!object) return
   const value = object[key]
@@ -192,7 +193,32 @@ function coverOrMerge<T extends object>(object: T, key: keyof T, mergeValue: any
   }
 }
 
-function mergePassive(option: EChartsOption, optionName: keyof EChartsOption, theme: Theme, themeName: keyof Theme, typeKey?: string) {
+/**
+ * 主动合并
+ * 不管echarts配置项是否有值，都将主题的配置合并进去
+ * 
+ * @param option 
+ * @param optionName 
+ * @param theme 
+ * @param themeName 
+ */
+function mergeActive(option: EChartsOption, optionName: keyof EChartsOption, theme: Theme, themeName: keyof Theme) {
+  coverOrMerge(option, optionName, theme[themeName])
+}
+
+/**
+ * 被动合并
+ * 只有在echarts配置项有值时，才将主题配置合并进去
+ * 
+ * @param option 
+ * @param optionName 
+ * @param theme 
+ * @param themeName 
+ * @param typeKey 
+ * @param defaultOptionType
+ * @returns 
+ */
+function mergePassive(option: EChartsOption, optionName: keyof EChartsOption, theme: Theme, themeName: keyof Theme, typeKey?: string, defaultOptionType?: string) {
   const optionValue: any = option[optionName]
   const themeValue = theme[themeName]
   if (optionValue == null || themeValue == null) return
@@ -205,7 +231,7 @@ function mergePassive(option: EChartsOption, optionName: keyof EChartsOption, th
       // 设置了类型，从下级中找具体配置
       if (typeKey) {
         const type = subOptionValue[typeKey]
-        subThemeValue = (themeValue as any)[type] // FIXME 强化类型
+        subThemeValue = (themeValue as any)[type || defaultOptionType] // FIXME 强化类型
       }
       if (!subThemeValue) return
 
@@ -229,14 +255,14 @@ export function withTheme(option: EChartsOption, theme: Theme): EChartsOption {
   if (!theme) return option
 
   MERGE_OPTIONS.forEach((mergeOption) => {
-    const { optionName, themeName, strategy, optionTypeKey } = mergeOption
+    const { optionName, themeName, strategy, optionTypeKey, defaultOptionType } = mergeOption
     const themeValue = theme[themeName]
     if (themeValue == null) return // 主题配置没有值，无论如何都不合并
 
     if (strategy === 'active') {
-      coverOrMerge(option, optionName, themeValue)
+      mergeActive(option, optionName, theme, themeName)
     } else if (strategy === 'passive') {
-      mergePassive(option, optionName, theme, themeName, optionTypeKey)
+      mergePassive(option, optionName, theme, themeName, optionTypeKey, defaultOptionType)
     }
   })
   return option
