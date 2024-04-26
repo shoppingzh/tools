@@ -1,1 +1,1 @@
-export * from './getValidItem'
+export * from './tryGetValidItem'
