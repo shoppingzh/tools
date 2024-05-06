@@ -1,7 +1,7 @@
-const objectProto = Object.prototype
-
 export type ObjectKeyType = string | number | symbol
-type FindObjectValue<T, R = unknown> = (keyof T) | ((o: T) => R)
+export type PropValueGetter<Item, PropValue = any> = (keyof Item) | ((item: Item) => PropValue)
+
+const objectProto = Object.prototype
 
 function getObjectTag(value: any): string {
   return objectProto.toString.call(value)
@@ -42,7 +42,7 @@ export function isDate(value: any): value is Date {
  * @param keyOrMap 对象key或回调
  * @returns 
  */
-export function getObjectPropValue<T, R>(object: T, keyOrMap: FindObjectValue<T, R>) {
+export function getObjectPropValue<T, R>(object: T, keyOrMap: PropValueGetter<T, R>) {
   if (typeof keyOrMap === 'string' || typeof keyOrMap === 'symbol') {
     return object[keyOrMap]
   }
