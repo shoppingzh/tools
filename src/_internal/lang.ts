@@ -43,7 +43,11 @@ export function isDate(value: any): value is Date {
  * @returns 
  */
 export function getObjectPropValue<T, R>(object: T, keyOrMap: FindObjectValue<T, R>) {
-  return typeof keyOrMap === 'function' ? keyOrMap(object) : object[keyOrMap]
+  if (typeof keyOrMap === 'string' || typeof keyOrMap === 'symbol') {
+    return object[keyOrMap]
+  }
+  if (typeof keyOrMap === 'function') return keyOrMap(object)
+  return undefined
 }
 
 
