@@ -5,6 +5,8 @@ it('normal', () => {
   expect(getValidItem(null, [null, null, 2, null, 3], { value: o => o, valid: o => o != null })).toBe(2)
   expect(getValidItem(1, [null, null, 2, null, 3], { value: o => o, valid: o => o != null })).toBe(2)
   expect(getValidItem(3, [null, null, 2, null, 3], { value: o => o, valid: o => o != null })).toBe(3)
+  expect(getValidItem(undefined, [null, null, 2, null, 3], { value: o => o, valid: () => true })).toBe(2)
+  expect(getValidItem(null, [null, null, 2, null, 3], { value: o => o, valid: () => true })).toBe(2)
 })
 
 it('object', () => {
@@ -16,7 +18,7 @@ it('object', () => {
 
 it('current is undefined/null', () => {
   const tabs = [{ value: 1, disabled: true }, { value: 2 }, { value: undefined as any, name: 'hello' }, { value: 3 }]
-  expect(getValidItem(undefined, tabs, { value: 'value', valid: o => !o.disabled })).toMatchObject({ name: 'hello' })
+  expect(getValidItem(undefined, tabs, { value: 'value', valid: o => !o.disabled })).toMatchObject({ value: 2 })
   expect(getValidItem(null, tabs, { value: 'value', valid: o => !o.disabled })).toMatchObject({ value: 2, })
 })
 
@@ -28,4 +30,7 @@ it('items is empty', () => {
 
 it('props is empty', () => {
   expect(() => getValidItem(1, [1, 2, 3], null)).toThrow()
+  expect(getValidItem(1, [1, 2, 3], {} as any)).toBeUndefined()
+  expect(getValidItem(undefined, [{ value: 1, disabled: true }, { value: 2 }], { valid: (o: any) => !o.disabled } as any)).toBeUndefined()
+  expect(getValidItem(2, [{ value: 1 }, { value: 2 }], { value: 'value' } as any)).toBeUndefined()
 })

@@ -60,3 +60,13 @@ export function getObjectPropValue<T, R>(object: T, keyOrMap: FindObjectValue<T,
 export function wrapArray<T>(value: T | T[]) {
   return Array.isArray(value) ? value : (value == null ? [] : [value])
 }
+
+/**
+ * 判断是否为非undefined或null
+ * 
+ * @param value 
+ * @returns 
+ */
+export function isNil(value: any) {
+  return value == null
+}
