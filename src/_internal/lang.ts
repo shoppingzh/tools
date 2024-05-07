@@ -1,5 +1,8 @@
 export type ObjectKeyType = string | number | symbol
+/** 对象属性获取：键名 | 回调 */
 export type PropValueGetter<Item, PropValue = any> = (keyof Item) | ((item: Item) => PropValue)
+/** 取出数组的元素类型 */
+export type ArrayItem<T> = T extends Array<infer E> ? E : T
 
 const objectProto = Object.prototype
 
