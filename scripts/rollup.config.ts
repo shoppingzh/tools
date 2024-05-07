@@ -26,11 +26,11 @@ export default [
     input: config.input,
     output: [{
       dir: config.OUT_ROOT,
-      format: 'esm',
+      format: 'cjs',
     }, {
       dir: config.OUT_ROOT,
-      format: 'cjs',
-      entryFileNames: '[name].cjs',
+      format: 'esm',
+      entryFileNames: '[name].mjs',
     }],
     external,
     plugins: [
