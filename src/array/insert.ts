@@ -8,8 +8,8 @@
  * @param objects 插入的元素
  * @returns 返回原数组
  */
-export function insert<T>(arr: T[], index: number, objects: T[]): T[];
-export function insert<T>(arr: T[], index: number, object: T): T[];
+export function insert<T>(arr: T[], index: number, objects: T[]): T[]
+export function insert<T>(arr: T[], index: number, object: T): T[]
 export function insert<T>(arr: T[], index: number, objects: any): T[] {
   if (index < 0) throw new Error('out of index')
   arr.splice(index, 0, ...(Array.isArray(objects) ? objects : [objects]))

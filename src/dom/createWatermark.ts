@@ -110,8 +110,8 @@ const DEFAULT_CREATE_WATERMARK_OPTIONS: CreateWatermarkOptions = {
  * @param text 水印文字
  * @param options 配置项
  */
-export function createWatermark(el: HTMLCanvasElement, text: string, options: CreateWatermarkOptions): void;
-export function createWatermark(el: HTMLElement, text: string, options: CreateWatermarkOptions): void;
+export function createWatermark(el: HTMLCanvasElement, text: string, options: CreateWatermarkOptions): void
+export function createWatermark(el: HTMLElement, text: string, options: CreateWatermarkOptions): void
 export function createWatermark(el: HTMLElement | HTMLCanvasElement, text: string, options: CreateWatermarkOptions) {
   const opts = merge({}, DEFAULT_CREATE_WATERMARK_OPTIONS, options)
   const watermarkCanvas = renderWatermark(text, opts)

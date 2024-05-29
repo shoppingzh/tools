@@ -1,4 +1,4 @@
-import { isArray, isArrayLike, isObject, isSet, isSymbol, merge } from 'lodash'
+import { isArray, isObject, isSet, isSymbol, merge } from 'lodash'
 
 interface Options<T> {
   encode?: boolean
