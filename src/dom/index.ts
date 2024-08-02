@@ -1,3 +1,4 @@
+export * from './copy'
 export * from './createWatermark'
 export * from './download'
 export * from './downloadBlob'
