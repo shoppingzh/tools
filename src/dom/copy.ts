@@ -1,11 +1,18 @@
-export function copy(text: string): Promise<void> {
-  return new Promise(() => {
-    // TODO
-  })
+/**
+ * 复制文本
+ * 
+ * @param text 
+ * @returns 
+ */
+export function copyText(text: string): Promise<void> {
+  return navigator.clipboard.writeText(text)
 }
 
-export function paste(): Promise<string> {
-  return new Promise(() = {
-    // TODO
-  })
+/**
+ * 获取复制的文本
+ * 
+ * @returns 
+ */
+export function getCopiedText(): Promise<string> {
+  return navigator.clipboard.readText()
 }
