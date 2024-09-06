@@ -1,2 +1,2 @@
 export * from './parseFromList'
-// export * from './iterate'
+export * from './traverse'
