@@ -12,8 +12,10 @@ export function traverseDeep<E>(nodes: E[], callback: TraverseCallback<E>, child
     if (!nodes || !nodes.length) return
     for (let i = 0;i < nodes.length;i++) {
       const node = nodes[i]
-      callback(node, parent, depth)
-      doTraverse(node[childrenProp] as E[], node, depth + 1)
+      const isBreak = callback(node, parent, depth)
+      if (isBreak === true) return true
+      const isBeforeBreak = doTraverse(node[childrenProp] as E[], node, depth + 1)
+      if (isBeforeBreak) return true
     }
   }
   doTraverse(nodes)
