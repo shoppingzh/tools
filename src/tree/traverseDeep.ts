@@ -1,7 +1,4 @@
-
-type TraverseCallback<T> = (node: T, parent: T, depth: number) => boolean | void
-const DEFAULT_CHILDREN_PROP = 'children'
-
+import { DEFAULT_CHILDREN_PROP, TraverseCallback } from './_base'
 
 /**
  * 深度遍历
@@ -20,15 +17,4 @@ export function traverseDeep<E>(nodes: E[], callback: TraverseCallback<E>, child
     }
   }
   doTraverse(nodes)
-}
-
-/**
- * 广度遍历
- * 
- * @param nodes 节点列表
- * @param callback 回调
- * @param childrenProp 子节点列表属性
- */
-export function traverseBreadth<E>(nodes: E[], callback: TraverseCallback<E>, childrenProp: keyof E = DEFAULT_CHILDREN_PROP as keyof E) {
-
 }

@@ -1,2 +1,3 @@
 export * from './parseFromList'
-export * from './traverse'
+export * from './traverseDeep'
+export * from './traverseBreadth'
