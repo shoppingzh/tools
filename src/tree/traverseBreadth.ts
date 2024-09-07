@@ -1,4 +1,4 @@
-import { DEFAULT_CHILDREN_PROP, TraverseCallback } from './_base'
+import { checkNodes, DEFAULT_CHILDREN_PROP, TraverseCallback } from './_base'
 
 /**
  * 广度遍历
@@ -8,6 +8,8 @@ import { DEFAULT_CHILDREN_PROP, TraverseCallback } from './_base'
  * @param childrenProp 子节点列表属性
  */
 export function traverseBreadth<E>(nodes: E[], callback: TraverseCallback<E>, childrenProp: keyof E = DEFAULT_CHILDREN_PROP as keyof E) {
+  checkNodes(nodes)
+
   const queue: E[] = [...nodes]
   const parentMap = new Map<E, E>()
   const depthMap = new Map<E, number>()
