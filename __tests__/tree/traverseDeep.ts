@@ -1,9 +1,9 @@
-import { traverseDeep, } from '@/tree'
+import { traverse, } from '@/tree'
 import nodes from './_nodes'
 
 it('base', () => {
   const result: [string, string, number][] = []
-  traverseDeep(nodes, (node, parent, depth) => {
+  traverse(nodes, (node, parent, depth) => {
     result.push([node.name, parent?.name, depth])
   })
   expect(result).toEqual([
@@ -27,13 +27,13 @@ it('base', () => {
 
 it('nodes is empty', () => {
   const callback = jest.fn()
-  traverseDeep([], callback)
+  traverse([], callback)
   expect(callback).not.toBeCalled()
 })
 
 it('break', () => {
   let times = 0
-  traverseDeep(nodes, (node) => {
+  traverse(nodes, (node) => {
     times++
     if (node.name === '1-2-2') return true
   })
@@ -42,26 +42,26 @@ it('break', () => {
 
 it('set children prop', () => {
   let times = 0
-  traverseDeep(nodes, () => {
+  traverse(nodes, () => {
     times++
-  }, 'childNodes' as any)
+  }, 'dfs-pre', 'childNodes' as any)
   expect(times).toBeLessThanOrEqual(3)
 })
 
 it('exception: nodes is nil', () => {
-  expect(() => traverseDeep(null, () => {})).toThrow()
-  expect(() => traverseDeep(undefined, () => {})).toThrow()
+  expect(() => traverse(null, () => {})).toThrow()
+  expect(() => traverse(undefined, () => {})).toThrow()
 })
 
 it('exception: callback is nil', () => {
-  expect(() => traverseDeep(nodes, null)).toThrow()
-  expect(() => traverseDeep(nodes, undefined)).toThrow()
+  expect(() => traverse(nodes, null)).toThrow()
+  expect(() => traverse(nodes, undefined)).toThrow()
 })
 
 it('exception: callback is not function', () => {
-  expect(() => traverseDeep(nodes, {} as any)).toThrow()
-  expect(() => traverseDeep(nodes, 1 as any)).toThrow()
-  expect(() => traverseDeep(nodes, [] as any)).toThrow()
-  expect(() => traverseDeep(nodes, true as any)).toThrow()
-  expect(() => traverseDeep(nodes, '1' as any)).toThrow()
+  expect(() => traverse(nodes, {} as any)).toThrow()
+  expect(() => traverse(nodes, 1 as any)).toThrow()
+  expect(() => traverse(nodes, [] as any)).toThrow()
+  expect(() => traverse(nodes, true as any)).toThrow()
+  expect(() => traverse(nodes, '1' as any)).toThrow()
 })

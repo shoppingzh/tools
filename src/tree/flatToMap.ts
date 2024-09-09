@@ -1,6 +1,6 @@
 import { getObjectPropValue, PropValueGetter } from '@/_internal'
-import { traverseBreadth } from './traverseBreadth'
-import { DEFAULT_CHILDREN_PROP } from './_base'
+import { DEFAULT_CHILDREN_PROP, TraverseStrategy } from './_base'
+import { traverse } from './traverse'
 
 /**
  * 将树平铺为一个对象
@@ -15,12 +15,13 @@ import { DEFAULT_CHILDREN_PROP } from './_base'
 export function flatToMap<E>(
   nodes: E[],
   prop: PropValueGetter<E>,
+  traverseStrategy?: TraverseStrategy,
   childrenProp:keyof E = DEFAULT_CHILDREN_PROP as keyof E
 ): Record<string, E> {
   const map = Object.create(null)
-  traverseBreadth(nodes, node => {
+  traverse(nodes, node => {
     const id = getObjectPropValue(node, prop)
     map[id] = node
-  }, childrenProp)
+  }, traverseStrategy, childrenProp)
   return map
 }
