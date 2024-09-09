@@ -7,6 +7,7 @@ import { traverse } from './traverse'
  * 注：鉴于遍历算法有可能不同，因此返回的平铺数组不承诺节点顺序的一致性(如一定遵循深度优先顺序或广度优先顺序)
  * 
  * @param nodes 树节点列表
+ * @param traverseStrategy 遍历算法(默认bfs)
  * @param childrenProp 子节点列表字段(默认children)
  * @returns 
  */
