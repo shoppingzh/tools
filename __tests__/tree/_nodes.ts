@@ -1,7 +1,7 @@
 interface TreeNode {
   id?: number
   name?: string
-  children?: TreeNode
+  children?: TreeNode[]
 }
 
 let id = 1

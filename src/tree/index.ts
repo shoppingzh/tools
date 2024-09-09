@@ -1,4 +1,6 @@
-export * from './parseFromList'
+export * from './find'
+export * from './findFirstLeaf'
 export * from './flat'
 export * from './flatToMap'
+export * from './parseFromList'
 export * from './traverse'
