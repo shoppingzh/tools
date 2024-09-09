@@ -8,7 +8,7 @@ module.exports = {
   testPathIgnorePatterns: [
     // '__tests__/number/formatChinese.ts',
     '__tests__/datetime',
-    '_\\w+\\.ts$',
+    '__tests__/tree/_nodes.ts',
   ],
   watch: false,
 }
