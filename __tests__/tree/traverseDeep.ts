@@ -31,6 +31,15 @@ it('nodes is empty', () => {
   expect(callback).not.toBeCalled()
 })
 
+it('exception: nodes is not array', () => {
+  expect(() => traverse(1 as any, () => {})).toThrow()
+})
+
+it('exception: nodes is nil', () => {
+  expect(() => traverse(null, () => {})).toThrow()
+  expect(() => traverse(undefined, () => {})).toThrow()
+})
+
 it('break', () => {
   let times = 0
   traverse(nodes, (node) => {
@@ -40,17 +49,12 @@ it('break', () => {
   expect(times).toBe(7)
 })
 
-it('set children prop', () => {
-  let times = 0
-  traverse(nodes, () => {
-    times++
-  }, 'dfs-pre', 'childNodes' as any)
-  expect(times).toBeLessThanOrEqual(3)
-})
-
-it('exception: nodes is nil', () => {
-  expect(() => traverse(null, () => {})).toThrow()
-  expect(() => traverse(undefined, () => {})).toThrow()
+it('exception: callback is not function', () => {
+  expect(() => traverse(nodes, {} as any)).toThrow()
+  expect(() => traverse(nodes, 1 as any)).toThrow()
+  expect(() => traverse(nodes, [] as any)).toThrow()
+  expect(() => traverse(nodes, true as any)).toThrow()
+  expect(() => traverse(nodes, '1' as any)).toThrow()
 })
 
 it('exception: callback is nil', () => {
@@ -58,10 +62,10 @@ it('exception: callback is nil', () => {
   expect(() => traverse(nodes, undefined)).toThrow()
 })
 
-it('exception: callback is not function', () => {
-  expect(() => traverse(nodes, {} as any)).toThrow()
-  expect(() => traverse(nodes, 1 as any)).toThrow()
-  expect(() => traverse(nodes, [] as any)).toThrow()
-  expect(() => traverse(nodes, true as any)).toThrow()
-  expect(() => traverse(nodes, '1' as any)).toThrow()
+it('set children prop', () => {
+  let times = 0
+  traverse(nodes, () => {
+    times++
+  }, 'dfs-pre', 'childNodes' as any)
+  expect(times).toBeLessThanOrEqual(3)
 })
