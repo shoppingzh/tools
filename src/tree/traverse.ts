@@ -60,10 +60,11 @@ function traverseBreadth<E extends BaseNode>(
   checkNodes(nodes)
 
   const queue: E[] = [...nodes]
+  let index = 0 // 通过游标节约性能，因为Array.prototype.shift是一个O(n)操作
   const parentMap = new Map<E, E>()
   const depthMap = new Map<E, number>()
-  while (queue.length) {
-    const node = queue.shift()
+  while (index < queue.length) {
+    const node = queue[index++]
     const parentNode = parentMap.get(node)
     const depth = depthMap.get(node) ?? 0
 
