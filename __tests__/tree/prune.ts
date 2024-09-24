@@ -19,3 +19,13 @@ it('root', () => {
   prune(cloneNodes, (node) => ['1', '2'].includes(node.name))
   expect(cloneNodes?.length).toBe(1)
 })
+
+it('exception: nodes is nil', () => {
+  expect(() => prune(undefined, () => true)).toThrow()
+  expect(() => prune(null, () => true)).toThrow()
+})
+
+it('exception: predicate is nil', () => {
+  expect(() => prune(nodes, undefined)).toThrow()
+  expect(() => prune(nodes, null)).toThrow()
+})
