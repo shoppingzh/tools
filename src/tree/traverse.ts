@@ -45,6 +45,11 @@ function traverseDeep<E extends BaseNode>(
   doTraverse(nodes)
 }
 
+interface NodeExtraInfo<E> {
+  depth: number
+  parent: E
+}
+
 /**
  * 广度遍历
  * 
@@ -61,21 +66,19 @@ function traverseBreadth<E extends BaseNode>(
 
   const queue: E[] = [...nodes]
   let index = 0 // 通过游标节约性能，因为Array.prototype.shift是一个O(n)操作
-  const parentMap = new Map<E, E>()
-  const depthMap = new Map<E, number>()
+  const extraInfoMap = new Map<E, NodeExtraInfo<E>>()
   while (index < queue.length) {
     const node = queue[index++]
-    const parentNode = parentMap.get(node)
-    const depth = depthMap.get(node) ?? 0
+    const extraInfo = extraInfoMap.get(node)
+    const depth = extraInfo?.depth ?? 0
 
-    const isBreak = callback(node, parentNode, depth)
+    const isBreak = callback(node, extraInfo?.parent, depth)
     if (isBreak === true) return
 
     const children = node[childrenProp] as E[]
     if (children) {
       for (const child of children) {
-        parentMap.set(child, node)
-        depthMap.set(child, depth + 1)
+        extraInfoMap.set(child, { parent: node, depth: depth + 1 })
         queue.push(child)
       }
     }
