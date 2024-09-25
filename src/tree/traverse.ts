@@ -7,7 +7,7 @@ type DeepTraverseStrategy = 'pre' | 'post'
  * 
  * @param nodes 节点列表
  * @param callback 回调
- * @param strategy
+ * @param strategy 遍历策略
  * @param childrenProp 子节点列表属性
  */
 function traverseDeep<E extends BaseNode>(
@@ -88,6 +88,10 @@ function traverseBreadth<E extends BaseNode>(
 
 /**
  * 遍历(默认采用深度优先先序遍历算法)
+ * 
+ * dfs算法使用函数递归实现，因此在树结构特别深的情况下，可能会引起栈溢出。但排除这种情况，它的性能是最好的。
+ * 
+ * bfs算法为了获取父节点和深度信息，内部维护了一个Map，频繁地写入和读取，导致了其性能不如dfs算法。
  * 
  * @param nodes 节点列表
  * @param callback 回调(可通过返回true中断遍历)
