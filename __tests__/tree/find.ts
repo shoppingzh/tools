@@ -12,7 +12,7 @@ it('not found', () => {
 })
 
 it('find first leaf node bfs strategy', () => {
-  const node = find(nodes, node => !node.children || !node.children.length)
+  const node = find(nodes, node => !node.children || !node.children.length, 'bfs')
   expect(node?.name).toBe('3')
 })
 
