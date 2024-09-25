@@ -4,7 +4,7 @@ import { traverse } from './traverse'
 /**
  * 寻找指定节点
  * 
- * 注意：使用不同的遍历策略，会导致找到的元素不同！！
+ * 该函数的目标是找到第一个命中的节点，因此，使用不同的遍历策略，可能会导致找到的元素不同
  * 
  * @param nodes 节点列表
  * @param predicate 推断函数，返回truthy时找到节点
