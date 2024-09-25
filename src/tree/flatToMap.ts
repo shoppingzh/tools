@@ -22,7 +22,9 @@ export function flatToMap<E>(
   const map = Object.create(null)
   traverse(nodes, node => {
     const id = getObjectPropValue(node, prop)
-    map[id] = node
+    if (id != null) {
+      map[id] = node
+    }
   }, traverseStrategy, childrenProp)
   return map
 }

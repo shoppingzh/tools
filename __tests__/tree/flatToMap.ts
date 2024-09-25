@@ -22,6 +22,11 @@ it('base', () => {
   ].sort())
 })
 
+it('id is nil', () => {
+  const map = flatToMap(nodes, 'id2' as any)
+  expect(Object.keys(map).length).toBe(0)
+})
+
 it('prop is a function', () => {
   const map = flatToMap(nodes, o => `Node-${o.id}`)
   const keys = Object.keys(map)
