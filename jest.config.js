@@ -6,9 +6,8 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testPathIgnorePatterns: [
-    // '__tests__/number/formatChinese.ts',
     '__tests__/datetime',
-    '__tests__/tree/_nodes.ts',
+    '_(\\w+)\\.ts',
   ],
   watch: false,
 }
