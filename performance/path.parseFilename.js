@@ -1,6 +1,6 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+
 const { random } = require('lodash')
-const { parseFilename } = require('../lib/path.cjs')
+const { parseFilename } = require('../lib/path')
 
 function randomChar() {
   return String.fromCharCode('A'.charCodeAt(0) + random(0, 32, false))
