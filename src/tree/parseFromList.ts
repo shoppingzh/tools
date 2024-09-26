@@ -1,18 +1,18 @@
 import { getObjectPropValue, PropValueGetter } from '@/_internal'
+import { BaseNode, ChildrenKeyType, DEFAULT_CHILDREN_PROP, DefaultChildrenKeyType, MixNodes } from './_base'
 
-interface Props<E extends object = Record<string, any>> {
+interface Props<E extends BaseNode = BaseNode, CK extends ChildrenKeyType = ChildrenKeyType> {
   id?: PropValueGetter<E>
   pid?: PropValueGetter<E>
+  children?: CK
 }
 
 const DEFAULT_PROPS: Props = {
   id: 'id',
   pid: 'pid',
+  children: DEFAULT_CHILDREN_PROP
 }
 
-interface Node {
-  children?: Node[]
-}
 
 /**
  * 从集合解析树
@@ -21,9 +21,9 @@ interface Node {
  * @param props 属性配置
  * @returns 
  */
-export function parseFromList<Source extends object, Target extends Source & Node = Source & Node>(
+export function parseFromList<Source extends BaseNode, CK extends ChildrenKeyType = DefaultChildrenKeyType, Target extends MixNodes<Source, CK> = MixNodes<Source, CK>>(
   list: Source[],
-  props?: Props<Source>,
+  props?: Props<Source, CK>,
 ): Target[] {
   const mergedProps: Props<Source> = Object.assign({}, DEFAULT_PROPS, props)
   const map: Record<any, Target> = Object.create(null) // 不直接使用{}，防止原型链上的属性干扰
@@ -44,9 +44,9 @@ export function parseFromList<Source extends object, Target extends Source & Nod
     } else {
       const parentItem = map[pid as any]
       if (parentItem) {
-        let children = parentItem.children
+        let children = parentItem[mergedProps.children as any] as Target[] // FIXME type
         if (!children) {
-          parentItem.children = (children = [])
+          (parentItem as any)[mergedProps.children] = (children = []) // FIXME type
         }
         children.push(item)
       } else {

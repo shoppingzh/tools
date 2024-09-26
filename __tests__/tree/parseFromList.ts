@@ -56,7 +56,7 @@ it('base', () => {
   ])
 })
 
-it('props: custom id', () => {
+it('custom id prop', () => {
   expect(parseFromList(createData(), {
     id: o => o.id * o.id,
   })).toEqual([
@@ -94,10 +94,15 @@ it('props: custom id', () => {
   ])
 })
 
-it('props: custom pid', () => {
+it('custom pid prop', () => {
   expect(parseFromList(createData(), {
     pid: () => undefined
   }).map(o => o.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+})
+
+it('custom children prop', () => {
+  const nodes = parseFromList(createData(), { children: 'childNodes' })
+  expect(nodes[0].childNodes?.length).toBe(2)
 })
 
 it('list is null', () => {
